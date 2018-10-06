@@ -4,6 +4,7 @@
 #include <vector>
 #include <initializer_list>
 #include <memory>
+#include <cmath>
 
 class StoppingCriterion {
 public:
@@ -34,4 +35,42 @@ public:
         }
         return false;
     }
+};
+
+
+
+class MaxIterations : public StoppingCriterion {
+    size_t max_iterations_;
+
+public:
+    MaxIterations(size_t n) : max_iterations_(n) {}
+
+    bool stop(const Point&, double, size_t iter,
+              const std::vector<std::pair<Point, double>>&) const override {
+        return iter >= max_iterations_;
+    }
+};
+
+class PointProximity : public StoppingCriterion {
+    double eps_;
+
+public:
+    PointProximity(double eps) : eps_(eps) {}
+
+    bool stop(const Point& x, double, size_t iter,
+              const std::vector<std::pair<Point, double>>& path) const override {
+        return (x - path[iter-1].first).len() < eps_;
+    }
+};
+
+class ValueProximity : public StoppingCriterion {
+    double eps_;
+
+public:
+    ValueProximity(double eps) : eps_(eps) {}
+
+    bool stop(const Point&, double val, size_t iter,
+              const std::vector<std::pair<Point, double>>& path) const override {
+        return fabs((val - path[iter-2].second)/val) < eps_;
+    } 
 };

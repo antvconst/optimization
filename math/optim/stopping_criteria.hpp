@@ -8,10 +8,10 @@
 class StoppingCriterion {
 public:
     virtual bool stop(const Point&, double, size_t,
-                      const std::vector<Point, double>&) {
+                      const std::vector<std::pair<Point, double>>&) const {
         assert(false);
         return true;
-    } 
+    }
 };
 
 class StoppingCriteria {
@@ -26,7 +26,7 @@ public:
     }
 
     bool stop(const Point& x, double val, size_t iter,
-              const std::vector<Point, double>& path) {
+              const std::vector<std::pair<Point, double>>& path) const {
         for (auto& criterion : criteria_) {
             if (criterion->stop(x, val, iter, path)) {
                 return true;

@@ -3,7 +3,9 @@
 #include "constraints.hpp"
 #include "point.hpp"
 #include "diff.hpp"
+#include "stopping_criteria.hpp"
 #include "ext/brent.hpp"
+
 #include <utility>
 #include <vector>
 
@@ -15,7 +17,7 @@ public:
     OptimizationPath minimize(T&& f,
                               const OptimizationConstraint& D,
                               const Point& x_0,
-                              double threshold = 1e-6) {
+                              const StoppingCriteria& stopping_criteria) {
         assert(D.dim() == x_0.dim());
 
         OptimizationPath path;
@@ -24,7 +26,7 @@ public:
         double value = f(x_0);
         path.push_back({x, value});
 
-        size_t iter = 0;
+        size_t iter = 0; 
         Point x_prev = x_0;
         do {
             x_prev = x;
@@ -32,9 +34,7 @@ public:
             value = f(x);
             path.push_back({x, value});
             ++iter;
-
-            std::cout << "i: " << iter << ", value: " << value << std::endl;
-        } while ((x_prev - x).len() > threshold);
+        } while (!stopping_criteria.stop(x, value, iter, path));
 
         return path;
     }

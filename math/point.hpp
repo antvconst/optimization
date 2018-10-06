@@ -51,8 +51,9 @@ public:
     }
 
     Point& operator= (const Point& other) {
-        data_ = other.data_;
-        
+        assert(N_ == other.N_);
+
+        data_ = other.data_;        
         return *this;
     }
 

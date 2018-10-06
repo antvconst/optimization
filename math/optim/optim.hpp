@@ -49,7 +49,7 @@ private:
             return f(x + t*grad);
         };
 
-        double coef = brent::local_min(f_dir, 0.0, 10e10, 10e-6);
+        double coef = brent::local_min(f_dir, 0.0, 1.0, 10e-6);
 
         auto p = x - coef * grad;
 

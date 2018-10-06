@@ -66,18 +66,13 @@ public:
     friend Point operator* (const Point& vec, double alpha);
     friend Point operator* (double alpha, const Point& vec);
     friend Point operator/ (const Point& vec, double alpha);
+    friend std::ostream& operator << (std::ostream& os, const Point& p);
 
     static Point unit(size_t N, size_t i) {
         Point u(N);
         u[i] = 1.0;
 
         return u;
-    }
-
-    void print() const {
-        for (size_t i = 0; i < N_; ++i)
-            std::cout << data_[i] << " ";
-        std::cout << std::endl;
     }
 };
 
@@ -153,4 +148,13 @@ Point operator/(const Point& vec, double alpha) {
         r.data_[i] = vec.data_[i] / alpha;
 
     return r;
+}
+
+std::ostream& operator << (std::ostream& os, const Point& p) {
+    os << "Point(";
+    for (size_t i = 0; i < p.N_-1; ++i)
+        os << p.data_[i] << ", ";
+    os << p.data_[p.N_-1] << ")";
+
+    return os;
 }

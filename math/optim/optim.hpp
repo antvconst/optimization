@@ -8,16 +8,51 @@
 
 #include <utility>
 #include <vector>
+#include <functional>
 
-class GradientDescent {
+using MultivariateFunction = std::function<double(const Point&)>;
+using OptimizationPath = std::vector<std::pair<Point, double>>;
+
+class Optimizer {
 public:
-    using OptimizationPath = std::vector<std::pair<Point, double>>;
-
-    template <typename T>
-    OptimizationPath minimize(T&& f,
-                              const OptimizationConstraint& D,
+    OptimizationPath minimize(const MultivariateFunction& f, const OptimizationConstraint& D,
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria) {
+        return minimize_impl(f, D, x_0, stopping_criteria);
+    }
+
+    OptimizationPath maximize(const MultivariateFunction& f, const OptimizationConstraint& D,
+                              const Point& x_0,
+                              const StoppingCriteria& stopping_criteria) {
+
+        auto path = minimize_impl(
+            [&](const Point& x) {
+                return -f(x);
+            }, D, x_0, stopping_criteria);
+
+        for (auto& p : path) {
+            p.second = -p.second;
+        }
+
+        return path;
+    }
+
+protected:
+    virtual OptimizationPath minimize_impl(const MultivariateFunction&,
+                                           const OptimizationConstraint&,
+                                           const Point&,
+                                           const StoppingCriteria&) {
+        assert(false);
+        return {};
+    }
+};
+
+class GradientDescent : public Optimizer {
+protected:
+    OptimizationPath minimize_impl(const MultivariateFunction& f,
+                                   const OptimizationConstraint& D,
+                                   const Point& x_0,
+                                   const StoppingCriteria& stopping_criteria) override {
         assert(D.dim() == x_0.dim());
 
         OptimizationPath path;

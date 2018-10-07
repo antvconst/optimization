@@ -7,13 +7,13 @@
 #include <utility>
 #include <initializer_list>
 
-class OptimizationConstraint {
+class Region {
 protected:
     size_t N_;
 
 public:
-    OptimizationConstraint() = delete;
-    OptimizationConstraint(size_t N) : N_(N) {}
+    Region() = delete;
+    Region(size_t N) : N_(N) {}
 
     size_t dim() const {
         return N_;
@@ -25,12 +25,12 @@ public:
 
 using Interval = std::pair<double, double>;
 
-class AABBConstraint : public OptimizationConstraint {
+class AABoxRegion : public Region {
 public:
     using Bounds = std::vector<Interval>;
 
-    AABBConstraint(std::initializer_list<Interval> bounds)
-        : OptimizationConstraint(bounds.size()), bounds_(bounds) {
+    AABoxRegion(std::initializer_list<Interval> bounds)
+        : Region(bounds.size()), bounds_(bounds) {
         assert(N_ != 0);
     }
 

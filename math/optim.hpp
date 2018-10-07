@@ -1,6 +1,6 @@
 #pragma once
 
-#include "constraints.hpp"
+#include "basic/region.hpp"
 #include "basic/point.hpp"
 #include "basic/diff.hpp"
 #include "stopping_criteria.hpp"
@@ -15,13 +15,13 @@ using OptimizationPath = std::vector<std::pair<Point, double>>;
 
 class Optimizer {
 public:
-    OptimizationPath minimize(const MultivariateFunction& f, const OptimizationConstraint& D,
+    OptimizationPath minimize(const MultivariateFunction& f, const Region& D,
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria) {
         return minimize_impl(f, D, x_0, stopping_criteria);
     }
 
-    OptimizationPath maximize(const MultivariateFunction& f, const OptimizationConstraint& D,
+    OptimizationPath maximize(const MultivariateFunction& f, const Region& D,
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria) {
 
@@ -39,7 +39,7 @@ public:
 
 protected:
     virtual OptimizationPath minimize_impl(const MultivariateFunction&,
-                                           const OptimizationConstraint&,
+                                           const Region&,
                                            const Point&,
                                            const StoppingCriteria&) {
         assert(false);
@@ -50,7 +50,7 @@ protected:
 class GradientDescent : public Optimizer {
 protected:
     OptimizationPath minimize_impl(const MultivariateFunction& f,
-                                   const OptimizationConstraint& D,
+                                   const Region& D,
                                    const Point& x_0,
                                    const StoppingCriteria& stopping_criteria) override {
         assert(D.dim() == x_0.dim());
@@ -77,7 +77,7 @@ protected:
 private:
     template <typename T>
     Point make_step(T&& f,
-                    const OptimizationConstraint& D,
+                    const Region& D,
                     const Point& x,
                     const Point& grad) {
         auto f_dir = [&](double t) -> double {

@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(SOURCE_FILES main.cpp)
 add_compile_options(
   "-Wall" "-Wpedantic" "-Wextra" "-fexceptions"
-  "-O0;-g3;-ggdb>"
+  "-O0;-g3;-ggdb"
 )
 
 include_directories(math)

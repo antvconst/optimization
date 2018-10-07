@@ -1,6 +1,6 @@
 #pragma once
 
-#include "point.hpp"
+#include "basic/point.hpp"
 #include <vector>
 #include <initializer_list>
 #include <memory>

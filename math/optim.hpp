@@ -1,8 +1,8 @@
 #pragma once
 
 #include "constraints.hpp"
-#include "point.hpp"
-#include "diff.hpp"
+#include "basic/point.hpp"
+#include "basic/diff.hpp"
 #include "stopping_criteria.hpp"
 #include "ext/brent.hpp"
 

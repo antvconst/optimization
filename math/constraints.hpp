@@ -1,6 +1,6 @@
 #pragma once
 
-#include "point.hpp"
+#include "basic/point.hpp"
 #include <limits>
 #include <algorithm>
 #include <array>

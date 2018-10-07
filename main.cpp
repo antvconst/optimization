@@ -1,4 +1,4 @@
-#include "math/point.hpp"
+#include "math/basic/point.hpp"
 #include "math/optim.hpp"
 #include "stopping_criteria.hpp"
 #include <cmath>

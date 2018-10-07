@@ -10,6 +10,6 @@ add_compile_options(
   "-O0;-g3;-ggdb>"
 )
 
-include_directories(math math/optim math/optim/ext)
+include_directories(math)
 
 add_executable(optim-main ${SOURCE_FILES})

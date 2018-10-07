@@ -1,8 +1,7 @@
 #include "math/point.hpp"
-#include "math/optim/optim.hpp"
+#include "math/optim.hpp"
 #include "stopping_criteria.hpp"
 #include <cmath>
-
 
 #include <iostream>
 using namespace std;

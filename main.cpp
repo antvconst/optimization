@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
     auto f = [](const Point& v) {
-       return (1-v[0])*(1-v[0]) + 100*(v[1] - v[0]*v[0])*(v[1] - v[0]*v[0]);
+       return (1 - v[0])*(1 - v[0]) + 100*(v[1] - v[0]*v[0])*(v[1] - v[0]*v[0]);
     };
 
     auto box = AABBConstraint{{-0.1, 10.0}, {-0.1, 20.0}};

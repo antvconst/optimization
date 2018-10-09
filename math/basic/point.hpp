@@ -1,11 +1,8 @@
 #pragma once
 
-#include <cmath>
-#include <cstdarg>
 #include <iostream>
 #include <vector>
 #include <initializer_list>
-#include <assert.h>
 
 const double EPS = 10e-9;
 
@@ -16,46 +13,20 @@ class Point
 
 public:
     Point() = delete;
-
-    Point(size_t N) : N_(N), data_(N_) {}
-
-    Point(const std::vector<double>& data) 
-        : N_(data.size()), data_(data) {}
-
-    Point(std::initializer_list<double> values)
-        : N_(values.size()), data_(values) {}
-
     Point(const Point& other) = default;
     Point(Point&& other) = default;
+    Point(size_t N);
+    Point(const std::vector<double>& data);
+    Point(std::initializer_list<double> values);
     ~Point() = default;
 
-    size_t dim() const {
-        return N_;
-    }
-
-    double operator[](size_t i) const {
-        return data_[i];
-    }
-
-    double& operator[](size_t i) {
-        return data_[i];
-    }
-
-    double len() const {
-        double s = 0;
-        for (size_t i = 0; i < N_; ++i) {
-            s += data_[i]*data_[i];
-        }
-
-        return sqrt(s);
-    }
-
-    Point& operator= (const Point& other) {
-        assert(N_ == other.N_);
-
-        data_ = other.data_;        
-        return *this;
-    }
+    size_t dim() const;
+    double len() const;
+    static Point unit(size_t N, size_t i);
+    
+    double operator[](size_t i) const;
+    double& operator[](size_t i);
+    Point& operator= (const Point& other);
 
     friend bool operator== (const Point& lhs, const Point& rhs);
     friend bool operator!= (const Point& lhs, const Point& rhs);
@@ -67,94 +38,4 @@ public:
     friend Point operator* (double alpha, const Point& vec);
     friend Point operator/ (const Point& vec, double alpha);
     friend std::ostream& operator << (std::ostream& os, const Point& p);
-
-    static Point unit(size_t N, size_t i) {
-        Point u(N);
-        u[i] = 1.0;
-
-        return u;
-    }
 };
-
-// EQUALITY
-bool operator==(const Point& lhs, const Point& rhs) {
-    return (lhs - rhs).len() < EPS;
-}
-
-bool operator!= (const Point& lhs, const Point& rhs) {
-    return !(lhs == rhs);
-}
-
-// UNARY MINUS
-Point operator-(const Point& vec) {
-    Point r(vec.N_);
-    for (size_t i = 0; i < vec.N_; ++i)
-        r.data_[i] = -vec.data_[i];
-    
-    return r;
-}
-
-// ADDITION_
-Point operator+(const Point& lhs, const Point& rhs) {
-    assert(lhs.N_ == rhs.N_);
-
-    Point r(lhs.N_);
-    for (size_t i = 0; i < lhs.N_; ++i)
-        r.data_[i] = lhs.data_[i] + rhs.data_[i];
-
-    return r;
-}
-
-// SUBTRACTION
-Point operator-(const Point& lhs, const Point& rhs) {
-    assert(lhs.N_ == rhs.N_);
-
-    Point r(lhs.N_);
-    for (size_t i = 0; i < lhs.N_; ++i)
-        r.data_[i] = lhs.data_[i] - rhs.data_[i];
-
-    return r;
-}
-
-// COMPONENT-WISE MULTIPLICATION
-Point operator*(const Point& lhs, const Point& rhs) {
-    assert(lhs.N_ == rhs.N_);
-
-    Point r(lhs.N_);
-    for (size_t i = 0; i < lhs.N_; ++i)
-        r.data_[i] = lhs.data_[i] * rhs.data_[i];
-
-    return r;
-}
-
-// SCALAR MULTIPLICATION
-Point operator*(const Point& vec, double alpha) {
-    Point r(vec.N_);
-    for (size_t i = 0; i < vec.N_; ++i)
-        r.data_[i] = alpha * vec.data_[i];
-
-    return r;
-}
-
-// SCALAR MULTIPLICATION
-Point operator*(double alpha, const Point& vec) {
-    return vec * alpha;
-}
-
-// SCALAR DIVISION
-Point operator/(const Point& vec, double alpha) {
-    Point r(vec.N_);
-    for (size_t i = 0; i < vec.N_; ++i)
-        r.data_[i] = vec.data_[i] / alpha;
-
-    return r;
-}
-
-std::ostream& operator << (std::ostream& os, const Point& p) {
-    os << "Point(";
-    for (size_t i = 0; i < p.N_-1; ++i)
-        os << p.data_[i] << ", ";
-    os << p.data_[p.N_-1] << ")";
-
-    return os;
-}

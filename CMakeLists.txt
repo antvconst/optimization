@@ -4,7 +4,7 @@ project(Optimization)
 
 
 set(CMAKE_CXX_STANDARD 14)
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp math/basic/aaboxregion.cpp math/basic/point.cpp)
 add_compile_options(
   "-Wall" "-Wpedantic" "-Wextra" "-fexceptions"
   "-O0;-g3;-ggdb"

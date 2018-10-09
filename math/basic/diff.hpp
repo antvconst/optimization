@@ -1,6 +1,7 @@
 #pragma once
 
 #include "point.hpp"
+#include <cassert>
 
 template <typename T>
 double derivative(T&& f, const Point& x, size_t i, double h = 10e-4) {

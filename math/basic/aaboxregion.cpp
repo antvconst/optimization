@@ -38,6 +38,6 @@ Point AABoxRegion::fit_to_bound(const Point& p, const Point& dir) const {
     return p + 0.5 * t_star * dir; // this way we will stay inside
 }
 
-Point AABoxRegion::random_point() {
-    return dist_.get();
+Point AABoxRegion::random_point() const {
+    return const_cast<BoxUniformDistribution&>(dist_).get();
 }

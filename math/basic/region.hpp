@@ -17,5 +17,5 @@ public:
 
     virtual bool lies_within(const Point& p) const = 0;
     virtual Point fit_to_bound(const Point& p, const Point& dir) const = 0;
-    virtual Point random_point() = 0;
+    virtual Point random_point() const = 0;
 };

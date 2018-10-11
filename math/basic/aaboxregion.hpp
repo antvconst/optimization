@@ -30,7 +30,7 @@ public:
 
     bool lies_within(const Point& p) const override;
     Point fit_to_bound(const Point& p, const Point& dir) const override;
-    Point random_point() override;
+    Point random_point() const override;
 
 private:
     Bounds bounds_;

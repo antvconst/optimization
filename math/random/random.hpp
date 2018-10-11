@@ -10,6 +10,7 @@ class AABoxRegion;
 class RandomDecision {
     std::bernoulli_distribution dist_;
 
+public:
     RandomDecision(double p) : dist_(p) {}
     bool get();
 };
@@ -19,6 +20,7 @@ class UnitBallUniformDistribution {
     std::normal_distribution<double> normal_dist_;
     std::uniform_real_distribution<double> uniform_dist_;
 
+public:
     UnitBallUniformDistribution(size_t dim) : dim_(dim) {}
     Point get();  
 };

@@ -15,9 +15,10 @@ public:
     bool get();
 };
 
-class UnitBallUniformDistribution {
+class BallUniformDistribution {
 public:
-    static Point get(size_t);  
+    static Point get(size_t);
+    static Point get(const Point& c, double r);
 };
 
 class BoxUniformDistribution {

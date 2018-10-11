@@ -7,11 +7,11 @@
 bool RandomDecision::get() {
     return dist_(SingletonGenerator::get_mt());
 }
-
+ 
 static std::normal_distribution<double> normal_dist_;
 static std::uniform_real_distribution<double> uniform_dist_;
 
-Point UnitBallUniformDistribution::get(size_t dim) {
+Point BallUniformDistribution::get(size_t dim) {
     Point p(dim);
 
     // Get a normal vector
@@ -24,6 +24,10 @@ Point UnitBallUniformDistribution::get(size_t dim) {
     double r = pow(alpha, 1./dim);
 
     return r * (p / p.len());
+}
+
+Point BallUniformDistribution::get(const Point& c, double r) {
+    return c + r * BallUniformDistribution::get(c.dim());
 }
 
 Point BoxUniformDistribution::get(const AABoxRegion& region) {

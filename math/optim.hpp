@@ -68,7 +68,7 @@ protected:
             value = f(x);
             path.push_back({x, value});
             ++iter;
-        } while (!stopping_criteria.stop(x, value, iter, path));
+        } while (!stopping_criteria.stop(x, value, iter, 0, path));
 
         return path;
     }

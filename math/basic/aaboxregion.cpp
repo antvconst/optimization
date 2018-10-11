@@ -1,4 +1,3 @@
-
 #include "aaboxregion.hpp"
 
 #include <algorithm>

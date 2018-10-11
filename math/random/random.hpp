@@ -16,22 +16,13 @@ public:
 };
 
 class UnitBallUniformDistribution {
-    size_t dim_;
-    std::normal_distribution<double> normal_dist_;
-    std::uniform_real_distribution<double> uniform_dist_;
-
 public:
-    UnitBallUniformDistribution(size_t dim) : dim_(dim) {}
-    Point get();  
+    static Point get(size_t);  
 };
 
 class BoxUniformDistribution {
     using Interval = std::pair<double, double>;
 
-    size_t dim_;
-    const std::vector<Interval>& bounds_;
-
 public:
-    BoxUniformDistribution(const AABoxRegion* box);
-    Point get();
+    static Point get(const AABoxRegion& box);
 };

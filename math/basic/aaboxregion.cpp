@@ -4,7 +4,7 @@
 #include <algorithm>
 
 AABoxRegion::AABoxRegion(std::initializer_list<Interval> bounds)
-    : Region(bounds.size()), bounds_(bounds), dist_(this) {
+    : Region(bounds.size()), bounds_(bounds) {
     assert(N_ != 0);
 }
 
@@ -39,5 +39,5 @@ Point AABoxRegion::fit_to_bound(const Point& p, const Point& dir) const {
 }
 
 Point AABoxRegion::random_point() const {
-    return const_cast<BoxUniformDistribution&>(dist_).get();
+    return BoxUniformDistribution::get(*this);
 }

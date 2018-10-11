@@ -34,5 +34,4 @@ public:
 
 private:
     Bounds bounds_;
-    BoxUniformDistribution dist_;
 };

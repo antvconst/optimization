@@ -21,8 +21,6 @@ public:
 };
 
 class BoxUniformDistribution {
-    using Interval = std::pair<double, double>;
-
 public:
     static Point get(const AABoxRegion& box);
 };

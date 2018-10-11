@@ -18,13 +18,14 @@ public:
     OptimizationPath minimize(const MultivariateFunction& f, const Region& D,
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria) {
+        assert(D.dim() == x_0.dim());
         return minimize_impl(f, D, x_0, stopping_criteria);
     }
 
     OptimizationPath maximize(const MultivariateFunction& f, const Region& D,
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria) {
-
+        assert(D.dim() == x_0.dim());
         auto path = minimize_impl(
             [&](const Point& x) {
                 return -f(x);
@@ -53,8 +54,6 @@ protected:
                                    const Region& D,
                                    const Point& x_0,
                                    const StoppingCriteria& stopping_criteria) override {
-        assert(D.dim() == x_0.dim());
-
         OptimizationPath path;
 
         Point x = x_0;

@@ -13,13 +13,16 @@ int main() {
 
     auto box = AABoxRegion{{-0.1, 10.0}, {-0.1, 20.0}};
 
-    GradientDescent gd;
+    //GradientDescent gd;
+    StochasticSearch ss(0.7);
 
     StoppingCriteria sc;
-    sc.add<MaxIterations>(100000);
+    sc.add<MaxIterations>(1000000);
     sc.add<PointProximity>(1e-6);
+    sc.add<MaxFailedIterations>(10000);
 
-    auto path = gd.minimize(f, box, {10, 20}, sc);
+    //auto path = gd.minimize(f, box, {10, 20}, sc);
+    auto path = ss.minimize(f, box, {10, 20}, sc);
 
     std::cout << "Optimization finished:" << std::endl;
     std::cout << "Steps: " << path.size() - 1 << std::endl;

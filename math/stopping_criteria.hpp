@@ -8,8 +8,9 @@
 
 class StoppingCriterion {
 public:
-    virtual bool stop(const Point&, double, size_t, size_t,
-                      const std::vector<std::pair<Point, double>>&) const {
+    virtual bool stop(const Point&, double, 
+                      const Point&, double,
+                      size_t, size_t) const {
         assert(false);
         return true;
     }
@@ -26,10 +27,11 @@ public:
         criteria_.emplace_back(new T(std::forward<Args>(args)...));
     }
 
-    bool stop(const Point& x, double val, size_t iter, size_t fails,
-              const std::vector<std::pair<Point, double>>& path) const {
+    bool stop(const Point& x, double val,
+              const Point& x_prev, double val_prev,
+              size_t iter, size_t fails) const {
         for (auto& criterion : criteria_) {
-            if (criterion->stop(x, val, iter, fails, path)) {
+            if (criterion->stop(x, val, x_prev, val_prev, iter, fails)) {
                 return true;
             }
         }
@@ -43,8 +45,9 @@ class MaxIterations : public StoppingCriterion {
 public:
     MaxIterations(size_t n) : max_iterations_(n) {}
 
-    bool stop(const Point&, double, size_t iter, size_t,
-              const std::vector<std::pair<Point, double>>&) const override {
+    bool stop(const Point&, double,
+              const Point&, double,
+              size_t iter, size_t) const override {
         return iter >= max_iterations_;
     }
 };
@@ -55,8 +58,9 @@ class MaxFailedIterations : public StoppingCriterion {
 public:
     MaxFailedIterations(size_t n) : max_fails_(n) {}
 
-    bool stop(const Point&, double, size_t, size_t fails,
-              const std::vector<std::pair<Point, double>>&) const override {
+    bool stop(const Point&, double,
+              const Point&, double,
+              size_t, size_t fails) const override {
         return fails >= max_fails_;
     }
 };
@@ -67,9 +71,10 @@ class PointProximity : public StoppingCriterion {
 public:
     PointProximity(double eps) : eps_(eps) {}
 
-    bool stop(const Point& x, double, size_t iter, size_t,
-              const std::vector<std::pair<Point, double>>& path) const override {
-        return (x - path[iter-1].first).len() < eps_;
+    bool stop(const Point& x, double,
+              const Point& x_prev, double,
+              size_t, size_t) const override {
+        return (x - x_prev).len() < eps_;
     }
 };
 
@@ -79,8 +84,9 @@ class ValueProximity : public StoppingCriterion {
 public:
     ValueProximity(double eps) : eps_(eps) {}
 
-    bool stop(const Point&, double val, size_t iter, size_t,
-              const std::vector<std::pair<Point, double>>& path) const override {
-        return fabs((val - path[iter-2].second)/val) < eps_;
+    bool stop(const Point&, double val,
+              const Point&, double val_prev,
+              size_t, size_t) const override {
+        return fabs((val - val_prev)/val) < eps_;
     } 
 };

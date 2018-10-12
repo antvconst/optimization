@@ -62,13 +62,15 @@ protected:
 
         size_t iter = 0; 
         Point x_prev = x_0;
+        double val_prev = value;
         do {
             x_prev = x;
+            val_prev = value;
             x = make_step(f, D, x, gradient(f, x));
             value = f(x);
             path.push_back({x, value});
             ++iter;
-        } while (!stopping_criteria.stop(x, value, iter, 0, path));
+        } while (!stopping_criteria.stop(x, value, x_prev, val_prev, iter, 0));
 
         return path;
     }

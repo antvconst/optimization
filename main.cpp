@@ -1,7 +1,7 @@
 #include "math/basic/point.hpp"
 #include "math/basic/aaboxregion.hpp"
-#include "math/optim.hpp"
-#include "stopping_criteria.hpp"
+#include "math/optimization/stochastic_search.hpp"
+#include "math/optimization/stopping_criteria.hpp"
 #include <cmath>
 
 #include <iostream>

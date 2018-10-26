@@ -1,3 +1,4 @@
+*.user
 optim-build/*
 build/*
 .vscode/*

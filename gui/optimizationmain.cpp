@@ -5,15 +5,15 @@
 #include <QPixmap>
 #include <QColor>
 
+#include "exprtk/exprtk_wrapper.hpp"
+
 OptimizationMain::OptimizationMain(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::OptimizationMain)
 {
     ui->setupUi(this);
 
-    auto f = [](const Point& v) {
-        return (1 - v[0])*(1 - v[0]) + 100*(v[1] - v[0]*v[0])*(v[1] - v[0]*v[0]);
-    };
+    auto f = ExprTK_Function("(1-x)^2 + 100*(y - x^2)^2");
 
     Heatmap hm(f);
     auto par = Heatmap::Settings {

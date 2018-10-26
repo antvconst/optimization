@@ -10,11 +10,13 @@ CONFIG += c++14
 SOURCES += \
     main.cpp \
     optimizationmain.cpp \
-    heatmap.cpp
+    heatmap.cpp \
+    exprtk/exprtk_wrapper.cpp
 
 HEADERS += \
     heatmap.hpp \
-    optimizationmain.hpp
+    optimizationmain.hpp \
+    exprtk/exprtk_wrapper.hpp
 
 FORMS += \
     optimizationmain.ui

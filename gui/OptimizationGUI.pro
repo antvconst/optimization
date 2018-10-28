@@ -11,12 +11,16 @@ SOURCES += \
     main.cpp \
     optimizationmain.cpp \
     heatmap.cpp \
-    exprtk/exprtk_wrapper.cpp
+    exprtk/exprtk_wrapper.cpp \
+    optimizationvizwidget.cpp \
+    global.cpp
 
 HEADERS += \
     heatmap.hpp \
     optimizationmain.hpp \
-    exprtk/exprtk_wrapper.hpp
+    exprtk/exprtk_wrapper.hpp \
+    optimizationvizwidget.h \
+    global.hpp
 
 FORMS += \
     optimizationmain.ui

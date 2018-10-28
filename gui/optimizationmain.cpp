@@ -1,6 +1,7 @@
 #include "optimizationmain.hpp"
 #include "ui_optimizationmain.h"
 #include "heatmap.hpp"
+#include "global.hpp"
 
 #include <QPixmap>
 #include <QColor>
@@ -15,17 +16,20 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
 
     auto f = ExprTK_Function("(1-x)^2 + 100*(y - x^2)^2");
 
-    Heatmap hm(f);
-    auto par = Heatmap::Settings {
-            1000, 1000,
-            -2, 2,
-            -2, 2,
-            30, 0.008,
-            QColor("white"), QColor("navy")
-    };
+    Heatmap hm;
 
-    ui->label->setPixmap(QPixmap::fromImage(hm.render(par)));
-    ui->label->setAlignment(Qt::AlignCenter);
+    auto& par = Global::get_mutable();
+    par.hm.discretization_coeff = 30;
+    par.hm.scale_coeff = 0.008;
+    par.hm.color_low = QColor("white");
+    par.hm.color_high = QColor("navy");
+
+    par.ot.x_min = -1;
+    par.ot.x_max = 3;
+    par.ot.y_min = -2;
+    par.ot.y_max = 2;
+
+    par.ot.func = f;
 }
 
 OptimizationMain::~OptimizationMain()

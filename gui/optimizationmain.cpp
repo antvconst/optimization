@@ -16,8 +16,6 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
 
     auto f = ExprTK_Function("(1-x)^2 + 100*(y - x^2)^2");
 
-    Heatmap hm;
-
     auto& par = Global::get_mutable();
     par.hm.discretization_coeff = 30;
     par.hm.scale_coeff = 0.008;

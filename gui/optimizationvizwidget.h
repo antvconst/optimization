@@ -2,8 +2,6 @@
 
 #include <QLabel>
 
-#include "heatmap.hpp"
-
 class OptimizationVizWidget : public QLabel
 {
     Q_OBJECT
@@ -41,4 +39,6 @@ private:
 
         return {x-origin_x, cur_image_h-(y-origin_y)};
     }
+
+    QImage render_heatmap(int w, int h);
 };

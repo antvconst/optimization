@@ -1,21 +1,21 @@
 #include "global.hpp"
 
-Global* Global::instance = nullptr;
+Globals* Globals::instance = nullptr;
 
-const Global& Global::get() {
+const Globals& Globals::get() {
     if (!instance) {
-        instance = new Global();
+        instance = new Globals();
     }
 
     return *instance;
 }
 
-Global& Global::get_mutable() {
+Globals& Globals::get_mutable() {
     if (!instance) {
-        instance = new Global();
+        instance = new Globals();
     }
 
     return *instance;
 }
 
-Global::Global() {}
+Globals::Globals() {}

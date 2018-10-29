@@ -5,7 +5,7 @@
 #include "optimization/optimizer.hpp"
 #include "basic/aaboxregion.hpp"
 
-class Global
+class Globals
 {
 public:
     struct Heatmap {
@@ -34,12 +34,12 @@ public:
     OptimizationMethod om;
     OptimizationTarget ot;
 
-    static const Global& get();
-    static Global& get_mutable();
+    static const Globals& get();
+    static Globals& get_mutable();
 
 private:
-    static Global* instance;
-    Global();
+    static Globals* instance;
+    Globals();
 };
 
 #endif // SETTINGS_H

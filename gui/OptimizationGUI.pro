@@ -10,13 +10,11 @@ CONFIG += c++14
 SOURCES += \
     main.cpp \
     optimizationmain.cpp \
-    heatmap.cpp \
     exprtk/exprtk_wrapper.cpp \
     optimizationvizwidget.cpp \
     global.cpp
 
 HEADERS += \
-    heatmap.hpp \
     optimizationmain.hpp \
     exprtk/exprtk_wrapper.hpp \
     optimizationvizwidget.h \

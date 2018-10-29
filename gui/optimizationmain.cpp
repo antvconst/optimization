@@ -1,10 +1,12 @@
 #include "optimizationmain.hpp"
 #include "ui_optimizationmain.h"
+#include "optimizationvizwidget.h"
 #include "heatmap.hpp"
 #include "global.hpp"
 
 #include <QPixmap>
 #include <QColor>
+#include <QDebug>
 
 #include "exprtk/exprtk_wrapper.hpp"
 
@@ -28,6 +30,8 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
     par.ot.y_max = 2;
 
     par.ot.func = f;
+
+    connect(ui->label, &OptimizationVizWidget::pointTriggered, [](double x, double y) { qDebug() << x << " " << y; });
 }
 
 OptimizationMain::~OptimizationMain()

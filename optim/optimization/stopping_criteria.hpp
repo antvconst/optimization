@@ -1,6 +1,7 @@
 #pragma once
 
 #include "basic/point.hpp"
+#include <iostream>
 #include <vector>
 #include <initializer_list>
 #include <memory>
@@ -13,6 +14,10 @@ public:
                       size_t, size_t) const {
         assert(false);
         return true;
+    }
+
+    virtual const char* name() {
+        return "";
     }
 };
 
@@ -32,6 +37,7 @@ public:
               size_t iter, size_t fails) const {
         for (auto& criterion : criteria_) {
             if (criterion->stop(x, val, x_prev, val_prev, iter, fails)) {
+                std::cout << "Stopping cause: " << criterion->name() << std::endl;
                 return true;
             }
         }
@@ -50,6 +56,10 @@ public:
               size_t iter, size_t) const override {
         return iter >= max_iterations_;
     }
+
+    virtual const char* name() {
+        return "MaxIterations";
+    }
 };
 
 class MaxFailedIterations : public StoppingCriterion {
@@ -62,6 +72,10 @@ public:
               const Point&, double,
               size_t, size_t fails) const override {
         return fails >= max_fails_;
+    }
+    
+    virtual const char* name() {
+        return "MaxFailedIterations";
     }
 };
 
@@ -76,6 +90,10 @@ public:
               size_t, size_t) const override {
         return (x - x_prev).len() < eps_;
     }
+
+    virtual const char* name() {
+        return "PointProximity";
+    }
 };
 
 class ValueProximity : public StoppingCriterion {
@@ -89,4 +107,8 @@ public:
               size_t, size_t) const override {
         return fabs((val - val_prev)/val) < eps_;
     } 
+
+    virtual const char* name() {
+        return "ValueProximity";
+    }
 };

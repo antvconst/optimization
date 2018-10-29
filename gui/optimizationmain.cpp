@@ -2,6 +2,10 @@
 #include "ui_optimizationmain.h"
 #include "optimizationvizwidget.h"
 #include "global.hpp"
+#include "optimization/stochastic_search.hpp"
+#include "optimization/gradient_descent.hpp"
+#include "basic/aaboxregion.hpp"
+#include "optimization/stopping_criteria.hpp"
 
 #include <QPixmap>
 #include <QColor>
@@ -30,7 +34,16 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
 
     par.ot.func = f;
 
-    connect(ui->label, &OptimizationVizWidget::pointTriggered, [](double x, double y) { qDebug() << x << " " << y; });
+    connect(ui->label, &OptimizationVizWidget::pointTriggered, [&](double x, double y) {
+        AABoxRegion box({{par.ot.x_min, par.ot.x_max},
+                         {par.ot.y_min, par.ot.y_max}});
+        StoppingCriteria sc;
+        sc.add<MaxIterations>(100000);
+        par.om.optimizer.reset(new GradientDescent());
+        auto path = par.om.optimizer->minimize(par.ot.func, box, {x, y}, sc);
+        qDebug() << "path length: " << path.size();
+        ui->label->render(path);
+    });
 }
 
 OptimizationMain::~OptimizationMain()

@@ -16,10 +16,12 @@ public:
 
     void paintEvent(QPaintEvent*);
     void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
     void render(const OptimizationPath& path);
 
 signals:
+    void pointHovered(double x, double y);
     void pointTriggered(double x, double y);
 
 private:
@@ -32,7 +34,7 @@ private:
         return double(cur_image_h) / h < 0.8 || double(h) / cur_image_h < 0.8;
     }
 
-    inline bool click_inside_image(int x, int y) {
+    inline bool point_inside_image(int x, int y) {
         int c_x = width()/2;
         int c_y = height()/2;
 
@@ -62,6 +64,11 @@ private:
         double y_real = par.ot.y_min + y * y_step;
 
         return {x_real, y_real};
+    }
+
+    inline std::pair<double, double> coord_label_to_real(int x, int y) {
+        std::tie(x, y) = coord_label_to_image(x, y);
+        return coord_image_to_real(x, y);
     }
 
     inline std::pair<int, int> coord_real_to_image(double x, double y) {

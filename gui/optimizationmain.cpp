@@ -39,10 +39,14 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
                          {par.ot.y_min, par.ot.y_max}});
         StoppingCriteria sc;
         sc.add<MaxIterations>(100000);
-        par.om.optimizer.reset(new GradientDescent());
+        par.om.optimizer.reset(new StochasticSearch(0.7));
         auto path = par.om.optimizer->minimize(par.ot.func, box, {x, y}, sc);
         qDebug() << "path length: " << path.size();
         ui->label->render(path);
+    });
+
+    connect(ui->label, &OptimizationVizWidget::pointHovered, [&](double x, double y) {
+        ui->statusBar->showMessage(QString("Point: (%1, %2)").arg(x).arg(y));
     });
 }
 

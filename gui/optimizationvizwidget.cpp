@@ -19,6 +19,7 @@ OptimizationVizWidget::OptimizationVizWidget(QWidget* parent)
 {
     setParent(parent);
     setAlignment(Qt::AlignCenter);
+    setMouseTracking(true);
 }
 
 void OptimizationVizWidget::paintEvent(QPaintEvent *e) {
@@ -28,16 +29,25 @@ void OptimizationVizWidget::paintEvent(QPaintEvent *e) {
 }
 
 void OptimizationVizWidget::mouseReleaseEvent(QMouseEvent* e) {
-    if (!click_inside_image(e->x(), e->y())) {
+    if (!point_inside_image(e->x(), e->y())) {
         return;
     }
 
-    auto xy = coord_label_to_image(e->x(), e->y());
-
     double x, y;
-    std::tie(x, y) = coord_image_to_real(xy.first, xy.second);
+    std::tie(x, y) = coord_label_to_real(e->x(), e->y());
 
     emit pointTriggered(x, y);
+}
+
+void OptimizationVizWidget::mouseMoveEvent(QMouseEvent* e) {
+    if (!point_inside_image(e->x(), e->y())) {
+        return;
+    }
+
+    double x, y;
+    std::tie(x, y) = coord_label_to_real(e->x(), e->y());
+
+    emit pointHovered(x, y);
 }
 
 void OptimizationVizWidget::render_heatmap(int w, int h)

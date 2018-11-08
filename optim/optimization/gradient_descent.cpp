@@ -32,7 +32,7 @@ Point GradientDescent::make_step(const MultivariateFunction& f,
                                  const Point& x,
                                  const Point& grad) {
     auto f_dir = [&](double t) -> double {
-        return f(x + t*grad);
+        return f(x - t*grad);
     };
 
     double coef = brent::local_min(f_dir, 0.0, 1.0, 10e-6);

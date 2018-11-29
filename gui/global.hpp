@@ -26,8 +26,7 @@ public:
 
     struct OptimizationMethod {
         std::unique_ptr<Optimizer> optimizer;
-
-        double local_search_prob;
+        StoppingCriteria stopping_criteria;
     };
 
     Heatmap hm;

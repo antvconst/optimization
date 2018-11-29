@@ -18,7 +18,9 @@ public:
     void mouseReleaseEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
 
-    void render(const OptimizationPath& path);
+    void set_path(const OptimizationPath& path);
+    void render(bool redraw = false);
+    void render_heatmap(int w, int h);
 
 signals:
     void pointHovered(double x, double y);
@@ -96,5 +98,12 @@ private:
         draw_point(painter, p[0], p[1]);
     }
 
-    void render_heatmap(int w, int h);
+
+    inline void draw_line(QPainter& painter, const Point& p,
+                          const Point& q) {
+        auto img1 = coord_real_to_image(p[0], p[1]);
+        auto img2 = coord_real_to_image(q[0], q[1]);
+
+        painter.drawLine(img1.first, img1.second, img2.first, img2.second);
+    }
 };

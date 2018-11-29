@@ -13,6 +13,7 @@ class OptimizationMain : public QMainWindow
 
 public:
     explicit OptimizationMain(QWidget *parent = nullptr);
+    void setup();
     ~OptimizationMain();
 
 private:

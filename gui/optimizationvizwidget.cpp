@@ -25,7 +25,7 @@ OptimizationVizWidget::OptimizationVizWidget(QWidget* parent)
 void OptimizationVizWidget::paintEvent(QPaintEvent *e) {
     QLabel::paintEvent(e);
 
-    render(path);
+    render();
 }
 
 void OptimizationVizWidget::mouseReleaseEvent(QMouseEvent* e) {
@@ -48,6 +48,11 @@ void OptimizationVizWidget::mouseMoveEvent(QMouseEvent* e) {
     std::tie(x, y) = coord_label_to_real(e->x(), e->y());
 
     emit pointHovered(x, y);
+}
+
+void OptimizationVizWidget::set_path(const OptimizationPath& path)
+{
+    this->path = path;
 }
 
 void OptimizationVizWidget::render_heatmap(int w, int h)
@@ -89,9 +94,8 @@ void OptimizationVizWidget::render_heatmap(int w, int h)
     clear_heatmap = clear_heatmap.mirrored(false, true);
 }
 
-void OptimizationVizWidget::render(const OptimizationPath& path)
+void OptimizationVizWidget::render(bool redraw)
 {
-    this->path = path;
     auto& par = Globals::get();
 
     int image_w = width();
@@ -106,7 +110,7 @@ void OptimizationVizWidget::render(const OptimizationPath& path)
         image_h = (exp_h/exp_w) * image_w;
     }
 
-    if (size_changed_significantly(image_w, image_h)) {
+    if (size_changed_significantly(image_w, image_h) || redraw) {
         cur_image_h = image_h;
         cur_image_w = image_w;
         if (Globals::get().ot.func) {
@@ -117,9 +121,25 @@ void OptimizationVizWidget::render(const OptimizationPath& path)
     QImage heatmap(clear_heatmap.copy());
 
     QPainter painter(&heatmap);
-    painter.setPen(QPen(QBrush(Qt::red), 4, Qt::SolidLine, Qt::RoundCap));
-    for (auto p : path) {
-        draw_point(painter, p.first);
+    QPen pen_line(QBrush("orange"), 1, Qt::SolidLine, Qt::RoundCap);
+    QPen pen_point(QBrush("firebrick"), 6, Qt::SolidLine, Qt::RoundCap);
+    QPen pen_end(QBrush("red"), 10, Qt::SolidLine, Qt::SquareCap);
+
+    if (!path.empty()) {
+        painter.setPen(pen_line);
+        auto prev = path[0].first;
+        for (auto p : path) {
+            draw_line(painter, p.first, prev);
+            prev = p.first;
+        }
+
+        painter.setPen(pen_point);
+        for (auto p : path) {
+            draw_point(painter, p.first);
+        }
+
+        painter.setPen(pen_end);
+        draw_point(painter, (--path.end())->first);
     }
 
     setPixmap(QPixmap::fromImage(heatmap));

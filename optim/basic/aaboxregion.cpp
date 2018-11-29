@@ -2,6 +2,11 @@
 
 #include <algorithm>
 
+AABoxRegion::AABoxRegion(const Bounds& bounds)
+    : Region(bounds.size()), bounds_(bounds) {
+        assert(N_ != 0);
+}
+
 AABoxRegion::AABoxRegion(std::initializer_list<Interval> bounds)
     : Region(bounds.size()), bounds_(bounds) {
     assert(N_ != 0);

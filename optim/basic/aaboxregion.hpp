@@ -14,6 +14,7 @@ class AABoxRegion : public Region {
 public:
     using Bounds = std::vector<Interval>;
 
+    AABoxRegion(const Bounds& bounds);
     AABoxRegion(std::initializer_list<Interval> bounds);
 
     inline double lower(size_t i) const {

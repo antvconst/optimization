@@ -14,3 +14,6 @@ add_compile_options(
 set(SOURCE_FILES random/prng.cpp random/random.cpp basic/aaboxregion.cpp basic/point.cpp optimization/gradient_descent.cpp optimization/optimizer.cpp optimization/stochastic_search.cpp)
 
 add_library(optim ${SOURCE_FILES})
+
+add_executable(optim-main main.cpp)
+target_link_libraries(optim-main optim)

@@ -45,6 +45,8 @@ public:
                               const Point& x_0,
                               const StoppingCriteria& stopping_criteria);
 
+    virtual ~Optimizer();
+
 protected:
     /**
      * @brief Intrinsic minimization implementation to overload in descendant classes

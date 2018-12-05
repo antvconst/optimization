@@ -34,6 +34,8 @@ public:
     virtual const char* name() {
         return "";
     }
+
+    virtual ~StoppingCriterion() {}
 };
 
 /**

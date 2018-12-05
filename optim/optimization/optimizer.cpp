@@ -30,3 +30,5 @@ OptimizationPath Optimizer::minimize_impl(const MultivariateFunction&,
     assert(false);
     return {};
 }
+
+Optimizer::~Optimizer() {}

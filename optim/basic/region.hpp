@@ -20,6 +20,8 @@ public:
      */
     Region(size_t N) : N_(N) {}
 
+    virtual ~Region() {}
+
     /**
      * @brief Returns dimensionality
      * 

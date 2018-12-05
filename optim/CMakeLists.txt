@@ -7,7 +7,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 14)
 
 add_compile_options(
-  "-Wall" "-Wpedantic" "-Wextra" "-fexceptions"
+  "-Wall" "-Wpedantic" "-Wextra" "-fexceptions" "-Wsuggest-override" "-Wnon-virtual-dtor"
   "-O0;-g3;-ggdb"
 )
 

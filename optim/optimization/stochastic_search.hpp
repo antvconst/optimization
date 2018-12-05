@@ -27,7 +27,7 @@ protected:
     virtual OptimizationPath minimize_impl(const MultivariateFunction& f,
                                            const Region& D,
                                            const Point& x_0,
-                                           const StoppingCriteria& stopping_criteria);
+                                           const StoppingCriteria& stopping_criteria) override;
 
 private:
     RandomDecision random_decision_;

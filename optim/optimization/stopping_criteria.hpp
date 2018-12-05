@@ -110,7 +110,7 @@ public:
         return iter >= max_iterations_;
     }
 
-    virtual const char* name() {
+    virtual const char* name() override {
         return "MaxIterations";
     }
 };
@@ -136,7 +136,7 @@ public:
         return fails >= max_fails_;
     }
     
-    virtual const char* name() {
+    virtual const char* name() override {
         return "MaxFailedIterations";
     }
 };
@@ -162,7 +162,7 @@ public:
         return (x - x_prev).len() < eps_;
     }
 
-    virtual const char* name() {
+    virtual const char* name() override {
         return "PointProximity";
     }
 };
@@ -188,7 +188,7 @@ public:
         return fabs((val - val_prev)/val) < eps_;
     } 
 
-    virtual const char* name() {
+    virtual const char* name() override {
         return "ValueProximity";
     }
 };

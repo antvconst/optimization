@@ -3,19 +3,25 @@
 #include <vector>
 #include <limits>
 #include <cmath>
-#include <QDebug>
+#include <algorithm>
 #include <QPainter>
-#include <QDebug>
 #include <QMouseEvent>
 #include <QPainterPath>
 
 static QColor blend(QColor a, QColor b, double t) {
-    return QColor(int((1.-t)*a.red() + t*b.red()),
-                  int((1.-t)*a.green() + t*b.green()),
-                  int((1.-t)*a.blue() + t*b.blue()));
+    int r_ = (1.-t)*a.red() + t*b.red();
+    int g_ = (1.-t)*a.green() + t*b.green();
+    int b_ = (1.-t)*a.blue() + t*b.blue();
+
+    r_ = std::max(0, std::min(r_, 255));
+    g_ = std::max(0, std::min(g_, 255));
+    b_ = std::max(0, std::min(b_, 255));
+
+    return QColor(r_, g_, b_);
 }
 
 OptimizationVizWidget::OptimizationVizWidget(QWidget* parent)
+    : ready_(false)
 {
     setParent(parent);
     setAlignment(Qt::AlignCenter);
@@ -57,6 +63,9 @@ void OptimizationVizWidget::set_path(const OptimizationPath& path)
 
 void OptimizationVizWidget::render_heatmap(int w, int h)
 {
+    if (!ready_)
+        return;
+
     clear_heatmap = QImage(w, h, QImage::Format_RGB32);
 
     auto& par = Globals::get();
@@ -94,8 +103,16 @@ void OptimizationVizWidget::render_heatmap(int w, int h)
     clear_heatmap = clear_heatmap.mirrored(false, true);
 }
 
+void OptimizationVizWidget::set_ready(bool val)
+{
+    ready_ = val;
+}
+
 void OptimizationVizWidget::render(bool redraw)
 {
+    if (!ready_)
+        return;
+
     auto& par = Globals::get();
 
     int image_w = width();

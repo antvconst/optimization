@@ -9,14 +9,15 @@
 
 #include <QPixmap>
 #include <QColor>
-#include <QDebug>
 #include <QSlider>
+#include <QMessageBox>
 
 #include "exprtk/exprtk_wrapper.hpp"
 
 OptimizationMain::OptimizationMain(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::OptimizationMain)
+    ui(new Ui::OptimizationMain),
+    ready_(false)
 {
     ui->setupUi(this);
 
@@ -25,18 +26,22 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
     auto& par = Globals::get();
 
     connect(ui->opt_viz, &OptimizationVizWidget::pointTriggered, [&](double x, double y) {
+        if (!ready_) {
+            QMessageBox::critical(this, "Error", "Not ready");
+            return;
+        }
+
         AABoxRegion box({{par.ot.x_min, par.ot.x_max},
                          {par.ot.y_min, par.ot.y_max}});
 
         auto path = par.om.optimizer->minimize(par.ot.func, box, {x, y}, par.om.stopping_criteria);
-        qDebug() << "path length: " << path.size();
         ui->opt_viz->set_path(path);
         ui->opt_viz->render();
 
         double x_opt = path.back().first[0];
         double y_opt = path.back().first[1];
         double f_opt = path.back().second;
-        ui->resultsLabel->setText(QString("Optimum point:  (%1, %2)\nFunction value: %3\n").arg(x_opt).arg(y_opt).arg(f_opt));
+        ui->resultsLabel->setText(QString("Optimum point:  (%1, %2)\nFunction value: %3\nConverged in %4 successful iterations").arg(x_opt).arg(y_opt).arg(f_opt).arg(path.size()));
     });
 
     connect(ui->opt_viz, &OptimizationVizWidget::pointHovered, [&](double x, double y) {
@@ -44,7 +49,6 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
     });
 
     connect(ui->scaleSlider, &QSlider::valueChanged, [&](int t) {
-       qDebug() << t;
        Globals::get_mutable().hm.scale_coeff = 0.01 * t;
        ui->opt_viz->render(true);
     });
@@ -54,7 +58,19 @@ OptimizationMain::OptimizationMain(QWidget *parent) :
 
 void OptimizationMain::setup()
 {
+    ready_ = false;
+    ui->opt_viz->set_ready(false);
+
     auto& par = Globals::get_mutable();
+
+    auto new_func = ExprTK_Function(ui->target_func_textEdit->toPlainText().toStdString());
+
+    if (!new_func) {
+        QMessageBox::critical(this, "Error", "Failed to parse the function. Falling back.");
+        return;
+    }
+
+    par.ot.func = new_func;
 
     // let's leave these hardcoded
     par.hm.discretization_coeff = 30;
@@ -67,7 +83,11 @@ void OptimizationMain::setup()
     par.ot.x_max = ui->x_max_spinBox->value();
     par.ot.y_min = ui->y_min_spinBox->value();
     par.ot.y_max = ui->y_max_spinBox->value();
-    par.ot.func = ExprTK_Function(ui->target_func_textEdit->toPlainText().toStdString());
+
+    if (par.ot.x_min >= par.ot.x_max || par.ot.y_min >= par.ot.y_max) {
+        QMessageBox::critical(this, "Error", "Invalid region boundaries.");
+        return;
+    }
 
     StoppingCriteria sc;
 
@@ -79,28 +99,29 @@ void OptimizationMain::setup()
     }
     if (ui->point_proximity_checkBox->isChecked()) {
         double pp = pow(0.1, ui->point_proximity_spinBox->value());
-        qDebug() << pp;
         sc.add<PointProximity>(pp);
     }
     if (ui->value_proximity_checkBox->isChecked()) {
         double vp = pow(0.1, ui->value_proximity_spinBox->value());
-        qDebug() << vp;
         sc.add<ValueProximity>(vp);
     }
     par.om.stopping_criteria = std::move(sc);
 
     QString method = ui->method_comboBox->currentText();
-    qDebug() << method;
     if (method == "Stochastic Search") {
         double p = ui->p_spinBox->value();
         par.om.optimizer.reset(new StochasticSearch(p));
     }
     else if (method == "Gradient Descent") {
-        par.om.optimizer.reset(new GradientDescent());
+        double rate = pow(0.1, ui->optrate_spinBox->value());
+        par.om.optimizer.reset(new GradientDescent(rate));
     }
 
     ui->opt_viz->set_path({});
     ui->resultsLabel->setText("");
+
+    ready_ = true;
+    ui->opt_viz->set_ready(true);
 
     ui->opt_viz->render(true);
 }

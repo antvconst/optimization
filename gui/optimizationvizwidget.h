@@ -21,12 +21,14 @@ public:
     void set_path(const OptimizationPath& path);
     void render(bool redraw = false);
     void render_heatmap(int w, int h);
+    void set_ready(bool val);
 
 signals:
     void pointHovered(double x, double y);
     void pointTriggered(double x, double y);
 
 private:
+    bool ready_;
     QImage clear_heatmap;
     OptimizationPath path;
     int cur_image_h;

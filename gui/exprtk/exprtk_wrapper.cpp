@@ -1,17 +1,24 @@
 #include "exprtk/exprtk_wrapper.hpp"
 
+#include <QDebug>
+
+
+ExprTK_Function::ExprTK_Function()
+    : func_str_(""), x_proxy(0), y_proxy(0), ok(false)
+{}
+
 ExprTK_Function::ExprTK_Function(const std::string &func_str)
-    : func_str_(func_str), x_proxy(0), y_proxy(0) {
+    : func_str_(func_str), x_proxy(0), y_proxy(0), ok(false) {
     compile();
 }
 
 ExprTK_Function::ExprTK_Function(const ExprTK_Function &other)
-    : func_str_(other.func_str_), x_proxy(0), y_proxy(0) {
+    : func_str_(other.func_str_), x_proxy(0), y_proxy(0), ok(false) {
     compile();
 }
 
 ExprTK_Function::ExprTK_Function(ExprTK_Function &&other)
-    : func_str_(other.func_str_), x_proxy(0), y_proxy(0) {
+    : func_str_(other.func_str_), x_proxy(0), y_proxy(0), ok(false) {
     compile();
 }
 
@@ -29,18 +36,24 @@ ExprTK_Function& ExprTK_Function::operator=(ExprTK_Function &&other) {
     return *this;
 }
 
+ExprTK_Function::operator bool() const
+{
+    return ok;
+}
+
 void ExprTK_Function::compile() {
     symbol_table.add_variable("x", x_proxy);
     symbol_table.add_variable("y", y_proxy);
     expr.register_symbol_table(symbol_table);
 
     exprtk::parser<double> parser;
-    parser.compile(func_str_, expr);
+    ok = parser.compile(func_str_, expr);
 }
 
 void ExprTK_Function::recompile() {
     symbol_table.clear();
     expr.release();
+    ok = false;
     compile();
 }
 

@@ -18,6 +18,7 @@ public:
 
 private:
     Ui::OptimizationMain *ui;
+    bool ready_;
 };
 
 #endif // OPTIMIZATIONMAIN_H

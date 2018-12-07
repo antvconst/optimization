@@ -7,6 +7,10 @@
  * 
  */
 class GradientDescent : public Optimizer {
+public:
+    GradientDescent(double rate)
+        : rate_(rate) {}
+
 protected:
     /**
      * @brief Optimizer interface implementation
@@ -24,6 +28,8 @@ protected:
                                    const StoppingCriteria& stopping_criteria) override;
 
 private:
+    double rate_;
+
     /**
      * @brief Single gradient descent step
      * 

@@ -128,7 +128,7 @@ int main(int, char**) {
 
     unique_ptr<Optimizer> optimizer;
     if (method == GD) 
-        optimizer.reset(new GradientDescent());
+        optimizer.reset(new GradientDescent(1e-6));
     else
         optimizer.reset(new StochasticSearch(0.5));
 
